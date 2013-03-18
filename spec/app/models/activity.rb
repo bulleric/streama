@@ -28,5 +28,4 @@ class Activity
     object :photo
     target_object :album, :cache => [:title]
   end
-
 end

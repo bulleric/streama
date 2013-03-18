@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe "Activity" do
-
   let(:photo) { Photo.create(:file => "image.jpg") }
   let(:album) { Album.create(:title => "A test album") }
   let(:user) { User.create(:full_name => "Christos") }
@@ -17,11 +16,9 @@ describe "Activity" do
 
       @definition.is_a?(Streama::Definition).should be true
     end
-
   end
 
   describe "#publish" do
-
     before :each do
       @send_to = []
       2.times { |n| @send_to << User.create(:full_name => "Custom Receiver #{n}") }
@@ -33,14 +30,11 @@ describe "Activity" do
       @activity.receivers.size.should == 2
     end
 
-
     context "when activity not cached" do
-
       it "pushes activity to receivers" do
         @activity = Activity.publish(:new_photo_without_cache, {:actor => user, :object => photo, :target_object => album, :receivers => @send_to})
         @activity.receivers.size.should == 2
       end
-
     end
 
     it "overrides the recievers if option passed" do
@@ -48,9 +42,7 @@ describe "Activity" do
       @activity.receivers.size.should == 2
     end
 
-
-
-    context "when republishing"
+    context "when republishing" do
       before :each do
         @actor = user
         @activity = Activity.publish(:new_photo, {:actor => @actor, :object => photo, :target_object => album})
@@ -63,6 +55,7 @@ describe "Activity" do
         @activity.publish
         @activity.actor['full_name'].should eq "testing"
       end
+    end
   end
 
   describe ".publish" do
@@ -75,11 +68,9 @@ describe "Activity" do
       activity = Activity.publish(:new_mars_photo, {:actor => mars_user, :object => photo, :target_object => album})
       activity.should be_an_instance_of Activity
     end
-
   end
 
   describe "#refresh" do
-
     before :each do
       @user = user
       @activity = Activity.publish(:new_photo, {:actor => @user, :object => photo, :target_object => album})
@@ -94,11 +85,9 @@ describe "Activity" do
         @activity.refresh_data
       end.to change{ @activity.load_instance(:actor).full_name}.from("Christos").to("Test")
     end
-
   end
 
   describe "#load_instance" do
-
     before :each do
       @activity = Activity.publish(:new_photo, {:actor => user, :object => photo, :target_object => album})
       @activity = Activity.last
@@ -115,7 +104,5 @@ describe "Activity" do
     it "loads a target instance" do
       @activity.load_instance(:target_object).should be_instance_of Album
     end
-
   end
-
 end

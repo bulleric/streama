@@ -9,7 +9,5 @@ module Mars
     def followers
       self.class.all
     end
-
   end
-
 end
